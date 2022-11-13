@@ -77,13 +77,15 @@ public class CommonController {
 	}
 	
 	@PostMapping("/dashboard")
-	public void search(Model model, HttpServletRequest request) {
+	public void search(Model model, HttpServletRequest request, @AuthenticationPrincipal CustomUserDetails username) {
 		String keyword = request.getParameter("keyword");
 		List<User> users = userService.search(keyword);
 		Integer count = users.size();
 		
 		model.addAttribute("count", count);
 		model.addAttribute("users", users);
+		User loggedInUser = userService.getUserByUsername(username.getUsername());
+		model.addAttribute("person", loggedInUser);
 		//return "dashboard";
 	}
 	
@@ -130,7 +132,10 @@ public class CommonController {
 	@GetMapping("/verify")
 	public String verifyUser(@Param("code") String code) {
 	    if (userService.verify(code)) {
-	        return "";
+	        return "verify_success";
+	    } else {
+	        return "verify_fail";
+	    }
 	}
 	
 	@GetMapping("/forgot-password")
