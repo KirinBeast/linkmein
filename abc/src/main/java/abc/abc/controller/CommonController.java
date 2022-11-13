@@ -130,10 +130,7 @@ public class CommonController {
 	@GetMapping("/verify")
 	public String verifyUser(@Param("code") String code) {
 	    if (userService.verify(code)) {
-	        return "verify_success";
-	    } else {
-	        return "verify_fail";
-	    }
+	        return "";
 	}
 	
 	@GetMapping("/forgot-password")
